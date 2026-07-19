@@ -352,6 +352,9 @@ section{padding:80px 24px;}
 .variant-card{background:var(--graphite-panel); padding:26px;}
 .variant-card h4{font-family:var(--font-display); text-transform:uppercase; font-size:1.05rem; margin-bottom:10px;}
 .variant-card p{color:var(--steel-gray-mid); font-size:0.86rem;}
+.variant-card.with-photo{padding:0;}
+.variant-card.with-photo img{width:100%; height:170px; object-fit:cover; display:block;}
+.variant-card.with-photo .variant-card-body{padding:22px 26px;}
 
 .products-grid{
   display:grid;
