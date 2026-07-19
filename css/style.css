@@ -536,6 +536,13 @@ form{background:var(--steel-charcoal); border:1px solid var(--hairline); padding
 }
 .wa-btn:hover{background:#2fe374;}
 
+.trust-line{
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--steel-gray-mid);
+  margin-top:14px;
+}
+
 /* Related products (product pages) */
 .related-grid{
   display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
