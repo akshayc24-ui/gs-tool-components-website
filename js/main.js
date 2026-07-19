@@ -2,6 +2,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+
+  var navToggle = document.getElementById('navToggle');
+  var siteNav = document.getElementById('siteNav');
+  if (navToggle && siteNav) {
+    var closeNav = function () {
+      siteNav.setAttribute('data-open', 'false');
+      navToggle.setAttribute('aria-expanded', 'false');
+    };
+    navToggle.addEventListener('click', function () {
+      var isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+      siteNav.setAttribute('data-open', String(!isOpen));
+      navToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+    siteNav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeNav);
+    });
+  }
+
   var form = document.getElementById('leadForm');
   if (!form) return;
 
