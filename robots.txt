@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gstoolcomponents.com/sitemap.xml
+Sitemap: https://akshayc24-ui.github.io/gs-tool-components-website/sitemap.xml
