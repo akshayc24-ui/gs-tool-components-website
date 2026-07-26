@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var thankYou = document.getElementById('thankYou');
   var waFollowUp = document.getElementById('waFollowUp');
   var SALES_PHONE = '918052614858';
-  var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw56eVbr-VWfZTp8gyyzi2HTx7Fjd-TYR_gefDli1pHIge4702f5hWrzxreoYzDtzWcig/exec';
+  var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_MQyTwjbIGuRaf2Wa5kGPAKkM-LVT4p51kzqPnDwuXMvK_667EfzGP1TJPrWs4ue4vg/exec';
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
