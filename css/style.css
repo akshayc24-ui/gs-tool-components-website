@@ -3,6 +3,7 @@
   --graphite-panel:#22262C;
   --graphite-panel-2:#2A2F36;
   --safety-yellow:#F5B700;
+  --brand-red:#BD4F3F;
   --blueprint-blue:#4C8DBF;
   --warm-white:#EEEBE3;
   --steel-gray-mid:#8A9099;
@@ -141,7 +142,7 @@ nav a:hover, nav a.active{color:var(--safety-yellow);}
 .eyebrow{
   font-family:var(--font-mono);
   font-size:0.78rem;
-  color:var(--safety-yellow);
+  color:var(--brand-red);
   letter-spacing:0.12em;
   text-transform:uppercase;
   display:flex; align-items:center; gap:10px;
@@ -150,7 +151,7 @@ nav a:hover, nav a.active{color:var(--safety-yellow);}
 .eyebrow::before{
   content:"";
   width:26px; height:2px;
-  background:var(--safety-yellow);
+  background:var(--brand-red);
   display:inline-block;
 }
 h1{
