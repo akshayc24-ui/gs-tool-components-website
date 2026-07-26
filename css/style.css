@@ -59,9 +59,10 @@ header{
   text-decoration:none;
 }
 .logo .mark{
-  width:14px; height:14px;
-  background:var(--safety-yellow);
-  clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  width:26px; height:26px;
+  border-radius:50%;
+  background:url(../images/favicon.svg) center/cover no-repeat;
+  flex-shrink:0;
 }
 nav{display:flex; gap:26px;}
 nav a{
