@@ -21,66 +21,74 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   var form = document.getElementById('leadForm');
-  if (!form) return;
+  if (form) {
+    var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_MQyTwjbIGuRaf2Wa5kGPAKkM-LVT4p51kzqPnDwuXMvK_667EfzGP1TJPrWs4ue4vg/exec';
 
-  var thankYou = document.getElementById('thankYou');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var name = document.getElementById('name').value.trim();
+      var company = document.getElementById('company').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+      var interest = document.getElementById('interest').value;
+      var message = document.getElementById('message').value.trim();
+
+      var waText = "Hi, I'm " + name + (company ? ' from ' + company : '') + '. I\'m interested in ' + interest + '. ' + (message || '');
+
+      var submitted = false;
+      function submitLead(location) {
+        if (submitted) return;
+        submitted = true;
+
+        var payload = {
+          name: name,
+          company: company,
+          phone: phone,
+          interest: interest,
+          message: message,
+          city: (location && location.city) || '',
+          region: (location && location.region) || '',
+          country: (location && location.country) || ''
+        };
+
+        // sendBeacon survives the page navigating away right after; fetch may not.
+        if (navigator.sendBeacon) {
+          var blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' });
+          navigator.sendBeacon(SHEET_ENDPOINT, blob);
+        } else {
+          fetch(SHEET_ENDPOINT, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          }).catch(function () {});
+        }
+
+        window.location.href = '/thank-you.html?wa=' + encodeURIComponent(waText);
+      }
+
+      // Best-effort visitor location lookup (IP-based, no permission prompt).
+      // Never blocks submission -- falls back to blank location after 2s or on error.
+      var geoTimeout = setTimeout(function () { submitLead(null); }, 2000);
+      fetch('https://ipwho.is/')
+        .then(function (r) { return r.json(); })
+        .then(function (geo) {
+          clearTimeout(geoTimeout);
+          submitLead(geo);
+        })
+        .catch(function () {
+          clearTimeout(geoTimeout);
+          submitLead(null);
+        });
+    });
+  }
+
   var waFollowUp = document.getElementById('waFollowUp');
-  var SALES_PHONE = '918052614858';
-  var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_MQyTwjbIGuRaf2Wa5kGPAKkM-LVT4p51kzqPnDwuXMvK_667EfzGP1TJPrWs4ue4vg/exec';
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    var name = document.getElementById('name').value.trim();
-    var company = document.getElementById('company').value.trim();
-    var phone = document.getElementById('phone').value.trim();
-    var interest = document.getElementById('interest').value;
-    var message = document.getElementById('message').value.trim();
-
-    var waText = encodeURIComponent(
-      "Hi, I'm " + name + (company ? ' from ' + company : '') + '. I\'m interested in ' + interest + '. ' + (message || '')
-    );
-    waFollowUp.href = 'https://wa.me/' + SALES_PHONE + '?text=' + waText;
-
-    var submitted = false;
-    function submitLead(location) {
-      if (submitted) return;
-      submitted = true;
-
-      var payload = {
-        name: name,
-        company: company,
-        phone: phone,
-        interest: interest,
-        message: message,
-        city: (location && location.city) || '',
-        region: (location && location.region) || '',
-        country: (location && location.country) || ''
-      };
-
-      fetch(SHEET_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      }).catch(function () {});
-
-      form.style.display = 'none';
-      thankYou.classList.add('show');
-    }
-
-    // Best-effort visitor location lookup (IP-based, no permission prompt).
-    // Never blocks submission -- falls back to blank location after 2s or on error.
-    var geoTimeout = setTimeout(function () { submitLead(null); }, 2000);
-    fetch('https://ipwho.is/')
-      .then(function (r) { return r.json(); })
-      .then(function (geo) {
-        clearTimeout(geoTimeout);
-        submitLead(geo);
-      })
-      .catch(function () {
-        clearTimeout(geoTimeout);
-        submitLead(null);
-      });
-  });
+  if (waFollowUp) {
+    var params = new URLSearchParams(window.location.search);
+    var waParam = params.get('wa');
+    var SALES_PHONE = '918052614858';
+    var text = waParam || "Hi, I just submitted a requirement on your website.";
+    waFollowUp.href = 'https://wa.me/' + SALES_PHONE + '?text=' + encodeURIComponent(text);
+  }
 });
