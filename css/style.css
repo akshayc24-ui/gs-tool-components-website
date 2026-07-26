@@ -20,6 +20,7 @@ body{
   background:var(--steel-charcoal);
   color:var(--warm-white);
   font-family:var(--font-body);
+  font-size:17px;
   line-height:1.6;
   overflow-x:hidden;
 }
@@ -340,7 +341,7 @@ section{padding:80px 24px;}
 }
 .feature-list li:last-child{border-bottom:none;}
 .feature-list .dot{color:var(--safety-yellow); flex-shrink:0;}
-.feature-list strong{display:block; font-family:var(--font-display); text-transform:uppercase; font-size:0.9rem; letter-spacing:0.01em; margin-bottom:2px;}
+.feature-list strong{display:block; font-family:var(--font-body); font-weight:600; font-size:0.95rem; margin-bottom:2px;}
 .feature-list span{color:var(--steel-gray-mid); font-size:0.86rem;}
 
 /* Variant cards (used for sub-types e.g. pillar/wall mounted, single/double girder) */
@@ -350,7 +351,7 @@ section{padding:80px 24px;}
   margin-bottom:8px;
 }
 .variant-card{background:var(--graphite-panel); padding:26px;}
-.variant-card h4{font-family:var(--font-display); text-transform:uppercase; font-size:1.05rem; margin-bottom:10px;}
+.variant-card h4{font-family:var(--font-body); font-weight:600; font-size:1.1rem; margin-bottom:10px;}
 .variant-card p{color:var(--steel-gray-mid); font-size:0.86rem;}
 .variant-card.with-photo{padding:0;}
 .variant-card.with-photo img{width:100%; height:170px; object-fit:cover; display:block;}
@@ -378,9 +379,8 @@ section{padding:80px 24px;}
   display:block;
 }
 .product-card h4{
-  font-family:var(--font-display);
-  font-size:1.1rem;
-  text-transform:uppercase;
+  font-family:var(--font-body);
+  font-size:1.15rem;
   margin-bottom:10px;
   font-weight:600;
 }
@@ -438,7 +438,7 @@ section{padding:80px 24px;}
   flex-shrink:0;
   width:28px;
 }
-.why-list strong{display:block; margin-bottom:4px; font-family:var(--font-display); text-transform:uppercase; font-size:0.95rem; letter-spacing:0.01em;}
+.why-list strong{display:block; margin-bottom:4px; font-family:var(--font-body); font-weight:600; font-size:1rem;}
 .why-list span{color:var(--steel-gray-mid); font-size:0.88rem;}
 
 .lead-section{
@@ -567,7 +567,7 @@ form{background:var(--steel-charcoal); border:1px solid var(--hairline); padding
 }
 .related-card:hover{background:var(--graphite-panel-2);}
 .related-card span{font-family:var(--font-mono); font-size:0.68rem; color:var(--safety-yellow); letter-spacing:0.05em;}
-.related-card h5{font-family:var(--font-display); text-transform:uppercase; font-size:0.95rem; margin-top:8px;}
+.related-card h5{font-family:var(--font-body); font-weight:600; font-size:1rem; margin-top:8px;}
 
 footer{padding:40px 24px 30px;}
 .footer-inner{
