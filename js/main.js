@@ -83,6 +83,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function initCarousel(trackId, prevId, nextId) {
+    var track = document.getElementById(trackId);
+    var prevBtn = document.getElementById(prevId);
+    var nextBtn = document.getElementById(nextId);
+    if (!track || !prevBtn || !nextBtn) return;
+
+    function step() {
+      var item = track.children[0];
+      return item ? item.getBoundingClientRect().width + 1 : track.clientWidth;
+    }
+    function updateButtons() {
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      prevBtn.disabled = track.scrollLeft <= 2;
+      nextBtn.disabled = track.scrollLeft >= maxScroll - 2;
+    }
+    prevBtn.addEventListener('click', function () {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', function () {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    });
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    updateButtons();
+  }
+  initCarousel('productsTrack', 'productsPrev', 'productsNext');
+  initCarousel('galleryTrack', 'galleryPrev', 'galleryNext');
+
   var waFollowUp = document.getElementById('waFollowUp');
   if (waFollowUp) {
     var params = new URLSearchParams(window.location.search);
