@@ -93,20 +93,60 @@ document.addEventListener('DOMContentLoaded', function () {
       var item = track.children[0];
       return item ? item.getBoundingClientRect().width + 1 : track.clientWidth;
     }
+    function atEnd() {
+      return track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+    }
     function updateButtons() {
       var maxScroll = track.scrollWidth - track.clientWidth;
       prevBtn.disabled = track.scrollLeft <= 2;
       nextBtn.disabled = track.scrollLeft >= maxScroll - 2;
     }
+    function goNext() {
+      if (atEnd()) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: step(), behavior: 'smooth' });
+      }
+    }
+
+    var AUTOPLAY_MS = 4000;
+    var timer = null;
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function stopAutoplay() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+    function startAutoplay() {
+      if (reducedMotion) return;
+      stopAutoplay();
+      timer = setInterval(function () {
+        if (!document.hidden) goNext();
+      }, AUTOPLAY_MS);
+    }
+    function resetAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
     prevBtn.addEventListener('click', function () {
       track.scrollBy({ left: -step(), behavior: 'smooth' });
+      resetAutoplay();
     });
     nextBtn.addEventListener('click', function () {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
+      goNext();
+      resetAutoplay();
     });
     track.addEventListener('scroll', updateButtons);
     window.addEventListener('resize', updateButtons);
+    track.addEventListener('mouseenter', stopAutoplay);
+    track.addEventListener('mouseleave', startAutoplay);
+    track.addEventListener('touchstart', stopAutoplay, { passive: true });
+    track.addEventListener('touchend', function () { resetAutoplay(); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stopAutoplay(); else startAutoplay();
+    });
+
     updateButtons();
+    startAutoplay();
   }
   initCarousel('productsTrack', 'productsPrev', 'productsNext');
   initCarousel('galleryTrack', 'galleryPrev', 'galleryNext');
