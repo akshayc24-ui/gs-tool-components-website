@@ -467,7 +467,8 @@ section{padding:80px 0;}
 .carousel-track::-webkit-scrollbar{display:none;}
 .carousel-track .product-card{flex:0 0 300px; scroll-snap-align:start;}
 .carousel-track .gallery-item{flex:0 0 340px; scroll-snap-align:start;}
-.carousel-nav{display:flex; justify-content:flex-end; gap:10px; margin-top:16px;}
+.carousel-nav{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:16px; flex-wrap:wrap;}
+.carousel-arrows{display:flex; gap:10px;}
 .carousel-btn{
   width:42px; height:42px;
   border:1px solid var(--hairline);
@@ -480,6 +481,30 @@ section{padding:80px 0;}
 }
 .carousel-btn:hover{background:var(--graphite-panel-2);}
 .carousel-btn:disabled{opacity:0.35; cursor:default;}
+.carousel-dots{display:flex; align-items:center; gap:8px;}
+.carousel-dot{
+  width:8px; height:8px; padding:0; border-radius:50%;
+  border:none; background:var(--hairline); cursor:pointer;
+  transition:background 0.2s, transform 0.2s;
+}
+.carousel-dot:hover{background:var(--steel-gray-mid);}
+.carousel-dot.active{background:var(--safety-yellow); transform:scale(1.25);}
+.carousel-counter{font-family:var(--font-mono); font-size:0.78rem; color:var(--steel-gray-mid);}
+
+.carousel.ticker{overflow:hidden;}
+.ticker-track{
+  overflow:visible;
+  scroll-snap-type:none;
+  width:max-content;
+  animation:ticker-scroll linear infinite;
+}
+@keyframes ticker-scroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+@media (prefers-reduced-motion: reduce){
+  .ticker-track{animation-play-state:paused;}
+}
 
 .collage-grid{
   display:grid;

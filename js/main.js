@@ -83,11 +83,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function initCarousel(trackId, prevId, nextId) {
+  function initCarousel(trackId, prevId, nextId, dotsId, counterId) {
     var track = document.getElementById(trackId);
     var prevBtn = document.getElementById(prevId);
     var nextBtn = document.getElementById(nextId);
     if (!track || !prevBtn || !nextBtn) return;
+
+    var items = Array.prototype.slice.call(track.children);
+    var dotsEl = dotsId ? document.getElementById(dotsId) : null;
+    var counterEl = counterId ? document.getElementById(counterId) : null;
+    var dots = [];
 
     function step() {
       var item = track.children[0];
@@ -96,10 +101,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function atEnd() {
       return track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
     }
+    function currentIndex() {
+      if (atEnd()) return items.length - 1;
+      return Math.min(items.length - 1, Math.max(0, Math.round(track.scrollLeft / step())));
+    }
     function updateButtons() {
       var maxScroll = track.scrollWidth - track.clientWidth;
       prevBtn.disabled = track.scrollLeft <= 2;
       nextBtn.disabled = track.scrollLeft >= maxScroll - 2;
+      var idx = currentIndex();
+      if (dots.length) {
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
+      }
+      if (counterEl) counterEl.textContent = (idx + 1) + ' / ' + items.length;
     }
     function goNext() {
       if (atEnd()) {
@@ -127,6 +141,22 @@ document.addEventListener('DOMContentLoaded', function () {
       startAutoplay();
     }
 
+    if (dotsEl) {
+      items.forEach(function (item, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel-dot';
+        dot.setAttribute('aria-label', 'Go to item ' + (i + 1));
+        dot.addEventListener('click', function () {
+          var target = item.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft;
+          track.scrollTo({ left: target, behavior: 'smooth' });
+          resetAutoplay();
+        });
+        dotsEl.appendChild(dot);
+        dots.push(dot);
+      });
+    }
+
     prevBtn.addEventListener('click', function () {
       track.scrollBy({ left: -step(), behavior: 'smooth' });
       resetAutoplay();
@@ -148,8 +178,35 @@ document.addEventListener('DOMContentLoaded', function () {
     updateButtons();
     startAutoplay();
   }
-  initCarousel('productsTrack', 'productsPrev', 'productsNext');
-  initCarousel('galleryTrack', 'galleryPrev', 'galleryNext');
+
+  function initTicker(trackId, speedPxPerSec) {
+    var track = document.getElementById(trackId);
+    if (!track) return;
+
+    Array.prototype.slice.call(track.children).forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function setDuration() {
+      var halfWidth = track.scrollWidth / 2;
+      track.style.animationDuration = (halfWidth / speedPxPerSec) + 's';
+    }
+    setDuration();
+    window.addEventListener('resize', setDuration);
+
+    if (!reducedMotion) {
+      track.addEventListener('mouseenter', function () { track.style.animationPlayState = 'paused'; });
+      track.addEventListener('mouseleave', function () { track.style.animationPlayState = 'running'; });
+      track.addEventListener('touchstart', function () { track.style.animationPlayState = 'paused'; }, { passive: true });
+      track.addEventListener('touchend', function () { track.style.animationPlayState = 'running'; });
+    }
+  }
+
+  initCarousel('productsTrack', 'productsPrev', 'productsNext', 'productsDots', 'productsCounter');
+  initTicker('galleryTrack', 45);
 
   var waFollowUp = document.getElementById('waFollowUp');
   if (waFollowUp) {
